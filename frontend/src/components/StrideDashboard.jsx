@@ -1,12 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  Bar,
-  BarChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 const StrideDashboard = ({ threats }) => {
   const data = useMemo(() => {
@@ -32,14 +25,18 @@ const StrideDashboard = ({ threats }) => {
   return (
     <div className="stride-card">
       <h3>STRIDE Coverage</h3>
-      <div className="stride-chart">
-        <ResponsiveContainer width="100%" height={200}>
+      <div className="stride-chart" style={{ height: "200px", width: "100%", overflow: "hidden" }}>
+        <ResponsiveContainer width="99%" height={200} debounce={1}>
           <BarChart data={data} margin={{ left: 12 }}>
             <XAxis dataKey="name" hide />
             <YAxis allowDecimals={false} />
-            <Tooltip />
-            {/* Added isAnimationActive={false} right here 👇 */}
-            <Bar dataKey="value" fill="#1e1b18" radius={[8, 8, 0, 0]} isAnimationActive={false} />
+            <Bar 
+              dataKey="value" 
+              fill="#1e1b18" 
+              radius={[8, 8, 0, 0]} 
+              isAnimationActive={false} 
+              animationDuration={0} 
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
