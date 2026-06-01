@@ -40,7 +40,8 @@ const SecurityScoreCard = ({ score }) => {
             <XAxis type="number" domain={[0, 20]} hide />
             <YAxis type="category" dataKey="name" width={90} />
             <Tooltip />
-            <Bar dataKey="value" fill="#c0402b" radius={[8, 8, 8, 8]} />
+            {/* Added isAnimationActive={false} right here 👇 */}
+            <Bar dataKey="value" fill="#c0402b" radius={[8, 8, 8, 8]} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>
