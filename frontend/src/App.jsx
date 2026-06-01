@@ -84,6 +84,33 @@ const App = () => {
     };
   }, [token, projectId, clientId, setNodes, setEdges]);
 
+  // FIXED TEMPLATE LOADING (Unique ID Generation)
+  const handleLoadTemplate = (template) => {
+    setProjectId(null);
+    setProjectName(template.name);
+
+    const idMap = {};
+
+    const loadedNodes = (template.nodes || []).map((node, index) => {
+      const newId = crypto.randomUUID();
+      idMap[node.id] = newId;
+      return hydrateNode({ ...node, id: newId }, index);
+    });
+
+    const loadedEdges = (template.edges || []).map((edge) => {
+      return hydrateEdge({
+        ...edge,
+        id: crypto.randomUUID(),
+        source: idMap[edge.source] || edge.source,
+        target: idMap[edge.target] || edge.target,
+      });
+    });
+
+    setNodes(loadedNodes);
+    setEdges(loadedEdges);
+    setThreats([]);
+  };
+
   const onConnect = (params) => {
     const edge = createEdge(params.source, params.target);
     setEdges((eds) => [...eds, edge]);
@@ -201,19 +228,12 @@ const App = () => {
     return () => clearTimeout(timeout);
   }, [nodes, edges, projectName, projectId, clientId]);
 
-  const edgeThreatMap = useMemo(() => {
-    return edges.reduce((acc, edge) => {
-      acc[edge.id] = threatByEdge[edge.id] || [];
-      return acc;
-    }, {});
-  }, [edges, threatByEdge]);
-
   const nodesWithRisk = nodes.map((node) => {
     const relatedEdges = edges.filter(
       (edge) => edge.source === node.id || edge.target === node.id
     );
     const severityScore = relatedEdges.reduce((total, edge) => {
-      const threatsForEdge = edgeThreatMap[edge.id] || [];
+      const threatsForEdge = threatByEdge[edge.id] || [];
       return (
         total +
         threatsForEdge.reduce((sum, threat) => {
@@ -344,18 +364,6 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem("sf_token");
     setToken(null);
-  };
-
-  const handleLoadTemplate = (template) => {
-    setProjectId(null);
-    setProjectName(template.name);
-    const loadedNodes = (template.nodes || []).map((node, index) =>
-      hydrateNode(node, index)
-    );
-    const loadedEdges = (template.edges || []).map((edge) => hydrateEdge(edge));
-    setNodes(loadedNodes);
-    setEdges(loadedEdges);
-    setThreats([]);
   };
 
   const handleToggleLeft = () => {
