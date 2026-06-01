@@ -1,3 +1,6 @@
+Here is the fixed code. I have added `isAnimationActive={false}` to the `<Bar>` component on line 34 to stop the constant re-animating glitch.
+
+```jsx
 import React, { useMemo } from "react";
 import {
   Bar,
@@ -38,7 +41,8 @@ const StrideDashboard = ({ threats }) => {
             <XAxis dataKey="name" hide />
             <YAxis allowDecimals={false} />
             <Tooltip />
-            <Bar dataKey="value" fill="#1e1b18" radius={[8, 8, 0, 0]} />
+            {/* Added isAnimationActive={false} right here 👇 */}
+            <Bar dataKey="value" fill="#1e1b18" radius={[8, 8, 0, 0]} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -55,3 +59,5 @@ const StrideDashboard = ({ threats }) => {
 };
 
 export default StrideDashboard;
+
+```
