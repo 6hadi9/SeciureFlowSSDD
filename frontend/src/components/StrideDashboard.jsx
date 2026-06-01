@@ -1,6 +1,3 @@
-Here is the fixed code. I have added `isAnimationActive={false}` to the `<Bar>` component on line 34 to stop the constant re-animating glitch.
-
-```jsx
 import React, { useMemo } from "react";
 import {
   Bar,
@@ -59,5 +56,3 @@ const StrideDashboard = ({ threats }) => {
 };
 
 export default StrideDashboard;
-
-```
